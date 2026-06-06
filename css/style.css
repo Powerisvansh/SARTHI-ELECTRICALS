@@ -309,7 +309,7 @@ h1, h2, h3, h4, h5, h6 {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.45;
+  opacity: 0.5;
   filter: contrast(1.15) saturate(1.1);
   image-rendering: auto;
 }
