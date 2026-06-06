@@ -1,3 +1,32 @@
+// ===== PAGE TRANSITION =====
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity 0.4s ease-out';
+  setTimeout(() => {
+    document.body.style.opacity = '1';
+  }, 50);
+});
+
+// ===== ENHANCED BUTTON INTERACTIONS =====
+const buttons = document.querySelectorAll('.btn');
+buttons.forEach(btn => {
+  btn.addEventListener('mouseenter', function() {
+    this.style.transform = 'translateY(-3px) scale(1.02)';
+  });
+  
+  btn.addEventListener('mouseleave', function() {
+    this.style.transform = 'translateY(0) scale(1)';
+  });
+
+  btn.addEventListener('mousedown', function() {
+    this.style.transform = 'translateY(-1px) scale(0.98)';
+  });
+
+  btn.addEventListener('mouseup', function() {
+    this.style.transform = 'translateY(-3px) scale(1.02)';
+  });
+});
+
 // ===== SCROLL PROGRESS =====
 const progressBar = document.querySelector('.scroll-progress');
 
@@ -10,28 +39,49 @@ if (progressBar) {
   });
 }
 
-// ===== MOBILE MENU =====
+// ===== MOBILE MENU WITH SMOOTH ANIMATION =====
 const menuToggle = document.querySelector('.menu-toggle');
 const mobileMenu = document.querySelector('.mobile-menu');
 
 if (menuToggle && mobileMenu) {
   menuToggle.addEventListener('click', () => {
-    mobileMenu.classList.toggle('open');
-    const isOpen = mobileMenu.classList.contains('open');
+    const isOpen = mobileMenu.classList.toggle('open');
+    menuToggle.style.transform = isOpen ? 'rotate(90deg)' : 'rotate(0deg)';
+    
     menuToggle.innerHTML = isOpen
       ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>'
       : '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>';
   });
 
-  mobileMenu.querySelectorAll('a').forEach(link => {
+  mobileMenu.querySelectorAll('a').forEach((link, index) => {
+    link.style.opacity = '0';
+    link.style.animation = `slideInLeft 0.3s ease-out ${0.05 * index}s forwards`;
+    
     link.addEventListener('click', () => {
       mobileMenu.classList.remove('open');
+      menuToggle.style.transform = 'rotate(0deg)';
       menuToggle.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>';
     });
   });
 }
 
-// ===== HEADER SCROLL EFFECT =====
+// Add animation keyframe
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+`;
+document.head.appendChild(style);
+
+// ===== HEADER SCROLL EFFECT WITH BLUR =====
 const header = document.querySelector('.header');
 let lastScroll = 0;
 
@@ -44,17 +94,17 @@ if (header) {
       header.classList.remove('scrolled');
     }
     lastScroll = currentScroll;
-  });
+  }, { passive: true });
 }
 
-// ===== SCROLL REVEAL =====
+// ===== ENHANCED SCROLL REVEAL =====
 const revealElements = document.querySelectorAll('.reveal');
 
 const revealObserver = new IntersectionObserver(
   (entries) => {
-    entries.forEach(entry => {
+    entries.forEach((entry, index) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
+        entry.target.style.animation = `slideInUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) ${index * 0.1}s forwards`;
         revealObserver.unobserve(entry.target);
       }
     });
@@ -142,7 +192,7 @@ document.addEventListener('click', e => {
   smoothScrollTo(target.getBoundingClientRect().top + window.pageYOffset - 80);
 });
 
-// ===== BACK TO TOP =====
+// ===== ENHANCED BACK TO TOP =====
 const backToTop = document.querySelector('.back-to-top');
 
 if (backToTop) {
@@ -152,10 +202,19 @@ if (backToTop) {
     } else {
       backToTop.classList.remove('visible');
     }
-  });
+  }, { passive: true });
 
   backToTop.addEventListener('click', () => {
     smoothScrollTo(0);
+  });
+  
+  // Add hover glow effect
+  backToTop.addEventListener('mouseenter', function() {
+    this.style.boxShadow = '0 12px 40px rgba(37, 99, 235, 0.5), 0 0 0 0 rgba(37, 99, 235, 0.7)';
+  });
+  
+  backToTop.addEventListener('mouseleave', function() {
+    this.style.boxShadow = '0 8px 24px rgba(0,0,0,0.2)';
   });
 }
 
