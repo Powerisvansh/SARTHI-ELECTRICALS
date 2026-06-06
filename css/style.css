@@ -178,15 +178,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: var(--primary);
-  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  line-height: 1;
 }
 
-.logo span {
-  color: #fff;
-  font-weight: 300;
+.logo img {
+  display: block;
+  height: 32px;
+  width: auto;
 }
 
 .nav-links {
